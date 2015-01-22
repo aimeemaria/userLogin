@@ -1,0 +1,31 @@
+<!-- User info input form 
+add page title
+add header
+add ecs logo
+-->
+
+<form id="myForm">
+ 
+    <!-- Text input field -->
+    <h2>Email:</h2><br>
+    <input type="text" name="email" placeholder="Enter a valid email address..."><br>
+    <h2>Password:</h2><br>
+    <input type="text" name="pswd" placeholder="Enter the password">
+        
+    <!-- The submit button. It calls the server side function login() on click -->
+    <input type="submit" value="Check" 
+           onclick="this.value='Validating...';
+                    google.script.run.withSuccessHandler(results)
+                    .login(this.parentNode);
+                    return false;">      
+</form>
+
+<div id="output"></div>
+ 
+<!-- The function will be called after the Google Script has executed -->
+<script>
+    function results(status) {
+      document.getElementById('myForm').style.display = 'none';
+      document.getElementById('output').innerHTML = status;
+    }
+</script>
