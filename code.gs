@@ -1,31 +1,50 @@
-// Main Html Service function for GUI
-function doGet(e) {
-  return HtmlService.createHtmlOutputFromFile('index.html');
-}
+<!DOCTYPE html>
 
-// Function to validate email address and password
-function login(index){
-   try { 
-      var ss = SpreadsheetApp.openByUrl('https://docs.google.com/spreadsheets/d/1tozVWHRnMwYfvT3f8X86pbru-yOtynApyCUO4ZIitJo/edit#gid=0');
-     SpreadsheetApp.setActiveSpreadsheet(ss);
-     
-     var sheet1 = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-     sheet1.activate();
-     
+<?!= include('CSS'); ?>
 
- var range = SpreadsheetApp.getActive().getRange('C2:C4');
- var values = range.getValues();
 
- for (var i = 0; i < values.length; i++) {
-   for (var j = 0; j < values[i].length; j++) {
-     if (values[i][j]==index.email & index.pswd=="UVI-CSM") {
-       return "Login was successful!" ;
+<div class="form-style-1">
+
+<img src="http://www.uvi.edu/files/images/research/ECS/ecs_logo_1.jpg"><br><br>
+
+<form id="lookup"><br>
+<input type="text" name="value" placeholder="Search..."><br><br>
+<input type="submit" id="look" value="Search" onclick="this.value='Wait';
+                    google.script.run.withSuccessHandler(searchstat)
+                    .searching(this.parentNode);
+                    return false;">
+
+</form>
+<div id="results" hidden><h1><span class="important">Results</span></h1></div>
+<div id="empty"></div>
+<div id="data" hidden>
+<? var data = getData(); ?>
+<table style="width=100%" border="1px">
+  <? for (var i = 0; i < data.length; i++) { ?>
+    <tr>
+      <? for (var j = 0; j < data[i].length; j++) { ?>
+        <td><?= data[i][j] ?></td>
+      <? } ?>
+    </tr>
+  <? } ?>
+</table>
+
+</div>
+
+</div>
+
+<script>
+function searchstat(status) {
+document.getElementById('results').style.display = 'block';
+ if(status=="Success!"){
+       document.getElementById('look').value="Search";
+        document.getElementById('data').style.display = 'block';
+     } else {
+       document.getElementById('data').style.display = 'none';
+     document.getElementById('lookup').reset();
+     document.getElementById('look').value="Search";
+      document.getElementById('empty').innerHTML = status;
      }
-   }
- }
-  return "Sorry, you entered an invlaid email address or password. Please refresh the page to try again." 
-  } catch (error) {
-    
-    return error.toString();
-  }
 }
+
+</script>

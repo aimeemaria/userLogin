@@ -1,31 +1,45 @@
-<!-- User info input form 
-add page title
-add header
-add ecs logo
--->
+<!DOCTYPE html>
 
-<form id="myForm">
- 
-    <!-- Text input field -->
-    <h2>Email:</h2><br>
-    <input type="text" name="email" placeholder="Enter a valid email address..."><br>
-    <h2>Password:</h2><br>
-    <input type="text" name="pswd" placeholder="Enter the password">
+
+<?!= include('CSS'); ?>
+<div class="form-style-1">
+<img src="http://www.uvi.edu/files/images/research/ECS/ecs_logo_1.jpg"><br>
+
+<!-- User info input form -->
+<form id="myForm"><br>
+    <label><span class="required">All fields are required.</span></label><br>
+    <div id="tryagain" align="center"></div>
+    <label>Email:</label>
+    <input type="text" name="email" placeholder="Enter a valid email address..."><br><br>
+    <label>Password:</label>
+    <input type="password" name="pswd" placeholder="Enter the password..."><br><br>
         
     <!-- The submit button. It calls the server side function login() on click -->
-    <input type="submit" value="Check" 
-           onclick="this.value='Validating...';
+    <input type="submit" id="button" value="Enter" 
+           onclick="this.value='Wait';
                     google.script.run.withSuccessHandler(results)
                     .login(this.parentNode);
-                    return false;">      
+                    return false;"><br>
+     <p>Having trouble? Questions? Send an email to <a href="mailto:ecs@uvi.edu">ecs@uvi.edu</a></p>
+     
+     <div id="output" hidden><span class="important">SUCCESS! Please read the following statement and click continue only if you agree with the terms and conditions for using this portal.</span><br>
+     <?var url = getScriptUrl();?><a href='<?=url?>?page=test'> <input type="button" value="Continue"></a>
+     </div>
 </form>
 
-<div id="output"></div>
- 
-<!-- The function will be called after the Google Script has executed -->
+<!--The function will be called after the Google Script has executed-->
 <script>
-    function results(status) {
-      document.getElementById('myForm').style.display = 'none';
-      document.getElementById('output').innerHTML = status;
-    }
+function results(status) {
+
+     if(status=="Success!"){
+        document.getElementById('button').style.display = 'none';
+        document.getElementById('tryagain').style.display = 'none';
+         document.getElementById('output').style.display = 'block';
+     } else {
+       document.getElementById('myForm').reset();
+     document.getElementById('button').value="Enter";
+     document.getElementById('tryagain').innerHTML = status;
+     }
+}
 </script>
+
